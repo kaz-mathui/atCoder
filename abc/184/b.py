@@ -1,7 +1,8 @@
-for i in range(5):
-    print(i)
-print()ta
-
-
-
-
+n,x = map(int,input().split())
+s = input()
+for i in range(n):
+    if s[i] == "x":
+        x = max(0,x-1)
+    else:
+        x +=1
+print(x)
