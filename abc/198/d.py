@@ -1,22 +1,11 @@
-from functools import lru_cache
-H, W, A, B = map(int, input().split())
-ans = 0
+s1 = input()
+s2 = input()
+s3 = input()
 
-@lru_cache(maxsize=None)
-def dfs(i, bit, A, B):
-    if i == H * W:
-        global ans
-        ans += 1
-        return
-    if bit >> i & 1:
-        dfs(i + 1, bit, A, B)
-        return
-    if B:
-        dfs(i + 1, bit | 1 << i, A, B - 1)
-    if A:
-        if i % W != W - 1 and not bit & 1 << (i + 1):
-            dfs(i + 1, bit | 1 << i | 1 << (i + 1), A - 1, B)
-        if i + W < H * W:
-            dfs(i + 1, bit | 1 << i | 1 << (i + W), A - 1, B)
-dfs(0, 0, A, B)
-print(ans)
+len1 = len(s1)
+len2 = len(s2)
+len3 = len(s3)
+minlen = min(len1, len2,len3)
+# print(minlen)
+for i in range(10 ** (minlen-1),10 ** len(s3) - 1):
+    
