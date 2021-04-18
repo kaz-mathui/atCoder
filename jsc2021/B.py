@@ -15,5 +15,5 @@ for i in range(len(counts)):
         ans.append(str(u[i]))
         # print(u[i])
 
-L=' '.join(ans)
-print(L)
+# L=' '.join(ans)
+print(*ans)
