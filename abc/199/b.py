@@ -1,21 +1,19 @@
+# n = int(input())
+# a= list(map(int,input().split()))
+# b = list(map(int,input().split()))
 
-def is_palindrome(n):
-    flag = True
-    for i in range(len(n)):
-        if n[i] != n[len(n)-i-1]:
-            flag = False
-    return flag
+# a_max = max(a)
+# b_min = min(b)
 
-n = input()
-lenn = len(n)
-ans = False
-for i in range(lenn):
-    ans = is_palindrome(n)
-    if ans == True:
-        break
-    n = '0' + n
-if ans == False:
-    print('No')
-else:
-    print('Yes')
-    
+# if b_min - a_max + 1 <= 0:
+#     print(0)
+# else:
+#     print(b_min - a_max + 1)
+
+s = 'IPFL'
+# a = 1
+# b = 4
+# # print(s[:a-1])
+# # print(s[b-1:b])
+# s = s[:a-1] + s[b-1:b] + s[a:b-1] + s[a-1:a] + s[b:]
+print(s[2:])
