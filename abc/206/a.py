@@ -1,7 +1,9 @@
 
 n = int(input())
 
-if n%100 == 0:
-        print(n//100)
+if int(n*1.08) < 206:
+        print("Yay!")
+elif int(n*1.08) == 206:
+        print("so-so")
 else:
-        print(n//100+1)
+        print(":(")
