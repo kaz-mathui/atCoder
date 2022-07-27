@@ -1,52 +1,15 @@
-N, X, Y, Z = map(int, input().split())
-math = list(map(int,input().split()))
-english = list(map(int,input().split()))
- 
-passed = [False]*N
-ans = []
-scores =[]
- 
-for i in range(N):
-    scores.append((i, math[i], english[i]))
-
-scores.sort(key=lambda x:x[1], reverse=True)
- 
-idx = 0
-while X != 0:
-    if passed[scores[idx][0]] :
-        idx += 1
-        continue
-    ans.append(scores[idx][0])
-    passed[scores[idx][0]] = True
-    X -= 1
-    idx += 1
- 
-scores.sort(key=lambda x:x[0], reverse=False)
-scores.sort(key=lambda x:x[2], reverse=True)
-idx = 0
-while Y != 0:
-    if passed[scores[idx][0]] : 
-        idx += 1
-        continue
-    ans.append(scores[idx][0])
-    passed[scores[idx][0]] = True
-    Y -= 1
-    idx += 1
- 
-scores.sort(key=lambda x:x[0], reverse=False)
-scores.sort(key=lambda x:x[1]+x[2], reverse=True)
-idx = 0
-while Z != 0:
-    if passed[scores[idx][0]] :
-        idx += 1
-        continue
-    ans.append(scores[idx][0])
-    passed[scores[idx][0]] = True
-    Z -= 1
-    idx += 1
- 
-    
-ans.sort()
- 
-for a in ans:
-    print(a+1)
+n = int(input())
+g = [list(input()) for _ in range(n)]
+a = True
+# print(g)
+for y in range(n):
+  for x in range(n):
+    if x==y and g[y][x] != "-":
+      a=False
+    if g[y][x]=="W" and g[x][y]!="L":
+      a=False
+    if g[y][x]=="L" and g[x][y]!="W":
+      a=False
+    if g[y][x]=="D" and g[x][y]!="D":
+      a=False
+print("correct" if a else "incorrect")
