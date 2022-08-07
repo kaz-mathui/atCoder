@@ -1,11 +1,15 @@
-n = int(input())
-X = []
-for i in range(n):
-  A = []
-  for j in range(i+1):
-    if j == 0 or j == i:
-      A.append(1)
-      continue
-    A.append(X[i-1][j-1]+X[i-1][j])
-  print(*A,sep=' ')
-  X.append(A)
+def calc_dist(a,b):
+    return abs(a[0]-b[0]) + abs(a[1]-b[1])
+ 
+H,W = map(int,input().split())
+ 
+grid = [input() for _ in range(H)]
+ 
+find=[]
+for h in range(H):
+    for w in range(W):
+        if grid[h][w] == "o":
+            find.append((h,w))
+ 
+ 
+print(calc_dist(find[0],find[1]))
