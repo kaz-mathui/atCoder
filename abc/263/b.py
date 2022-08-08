@@ -1,15 +1,11 @@
-def calc_dist(a,b):
-    return abs(a[0]-b[0]) + abs(a[1]-b[1])
- 
-H,W = map(int,input().split())
- 
-grid = [input() for _ in range(H)]
- 
-find=[]
-for h in range(H):
-    for w in range(W):
-        if grid[h][w] == "o":
-            find.append((h,w))
- 
- 
-print(calc_dist(find[0],find[1]))
+n = int(input())
+P = list(map(int,input().split()))
+
+cnt = 0
+pre_num = P[-1]
+
+while pre_num!=1:
+    cnt+=1
+    pre_num = P[pre_num-2]
+
+print(cnt+1)
