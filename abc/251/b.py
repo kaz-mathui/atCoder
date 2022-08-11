@@ -1,11 +1,12 @@
-n = int(input())
-X = []
+n,w = map(int,input().split())
+A = [0,0,0] + list(map(int,input().split()))
+ 
+n += 3
+S = set()
+ 
 for i in range(n):
-  A = []
-  for j in range(i+1):
-    if j == 0 or j == i:
-      A.append(1)
-      continue
-    A.append(X[i-1][j-1]+X[i-1][j])
-  print(*A,sep=' ')
-  X.append(A)
+    for j in range(i + 1, n):
+        for k in range(j + 1, n):
+            if A[i] + A[j] + A[k] <= w:
+                S.add(A[i] + A[j] + A[k])
+print(len(S) - 1)
