@@ -1,21 +1,18 @@
+
+n = int(input())
+ST = [list(input().split()) for _ in range(n)]
  
-n, k = map(int, input().split())
-a = list(map(int, input().split()))
-c = []
+ans_t = 0
  
-for i in range(k):
-    b = []
-    for j in range(i, n, k):
-        b.append(a[j])
-    b.sort()
-    for j in range(i, n, k):
-        a[j] = b[int(j/k)]
+already_shown = set()
  
-k=a[0]
-for i in range(n):
-    if k > a[i]:
-        print("No")
-        exit()
-    else:
-        k = a[i]
-print("Yes")
+for i, st in enumerate(ST):
+    s, t = st
+    if s in already_shown:
+        continue
+    if ans_t < int(t):
+        ans_t = int(t)
+        ans = i + 1
+    already_shown.add(s)
+ 
+print(ans)
