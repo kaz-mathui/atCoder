@@ -1,12 +1,17 @@
-n,w = map(int,input().split())
-A = [0,0,0] + list(map(int,input().split()))
- 
-n += 3
-S = set()
- 
-for i in range(n):
-    for j in range(i + 1, n):
-        for k in range(j + 1, n):
-            if A[i] + A[j] + A[k] <= w:
-                S.add(A[i] + A[j] + A[k])
-print(len(S) - 1)
+n, a, b = map(int, input().split())
+for i in range(n * a):
+    ans = ''
+    if (i // a) % 2 == 0:
+        
+        for j in range(n * b):
+            if (j // b) % 2 == 0:
+                ans += '.'
+            else:
+                ans += '#'
+    else:
+        for j in range(n * b):
+            if (j // b) % 2 == 0:
+                ans += '#'
+            else:
+                ans += '.'
+    print(ans)
