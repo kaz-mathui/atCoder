@@ -1,15 +1,13 @@
-# from functools import lru_cache
-
-
-
-n = int(input())
-
-
-# @lru_cache(maxsize=None)
-def recur(n):
-    if n == 1:
-        return "1"
-    else:
-        return recur(n-1)+" "+str(n)+" "+recur(n-1)
-    
-print(recur(n))
+N,K,X = map(int,input().split())
+A = list(map(int,input().split()))
+for i in range(N):
+    m = min(K, A[i]//X)
+    A[i] -= X*m
+    K -= m
+A.sort(reverse=True)
+for i in range(N):
+    if 0 < K:
+        A[i] = 0
+        K -= 1
+ 
+print(sum(A))
