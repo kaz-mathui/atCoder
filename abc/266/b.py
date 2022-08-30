@@ -1,11 +1,13 @@
-n=int(input())
-t=list(input())
-s=[0,0]
-d=[1,-1,-1,1]
-i=0
-for tt in t:
-  if tt=='S':
-    s[i%2]+=d[i%4]
-  else:
-    i+=1
-print(*s)
+N = int(input())
+x = N
+ 
+i = N // 998244353
+ 
+x -= 998244353 * i
+ 
+if x >= 998244353:
+        x -= 998244353
+elif x < 0:
+        x += 998244353
+ 
+print(x)
