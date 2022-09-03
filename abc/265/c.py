@@ -1,37 +1,59 @@
-import math
+import sys, re
+from string import ascii_lowercase, ascii_uppercase, digits, hexdigits, octdigits
+from operator import add, sub, mul, mod, xor
+from math import sqrt, pi, factorial, gcd, sin, cos, atan2,degrees, radians
+from copy import deepcopy
+from collections import Counter, deque, defaultdict
+from heapq import heapify, heappop, heappush
+from itertools import accumulate, product, combinations, combinations_with_replacement, permutations
+from bisect import bisect, bisect_left, bisect_right
+from functools import reduce
+from decimal import Decimal, getcontext
+from array import array
+# input = sys.stdin.readline 
+def i_input(): return int(input())
+def i_map(): return map(int, input().split())
+def i_list(): return list(i_map())
+def i_row(N): return [i_input() for _ in range(N)]
+def i_row_list(N): return [i_list() for _ in range(N)]
+def s_input(): return input()
+def s_map(): return input().split()
+def s_list(): return list(s_map())
+def s_row(N): return [s_input() for _ in range(N)]
+def s_row_str(N): return [s_list() for _ in range(N)]
+def s_row_list(N): return [list(s_input()) for _ in range(N)]
+def lcm(a, b): return a * b // gcd(a, b)
+def ceil(a, b): return (a + b - 1) // b
+def floor(a, b): return a // b
+sys.setrecursionlimit(10 ** 6)
+INF = float('inf')
+MOD = 10 ** 9 + 7
  
-Ax, Ay = map(int, input().split())
-Bx, By = map(int, input().split())
-Cx, Cy = map(int, input().split())
-Dx, Dy = map(int, input().split())
- 
- 
-def getxy_RD(x, y, X, Y):
-    _x, _y = (X-x), (Y-y)
-    r = math.sqrt(_x**2+_y**2)
-    rad = math.atan2(_y, _x)
-    degree = math.degrees(rad)
-    if degree < 0:
-        degree += 360
-    return degree
- 
- 
-anslist = []
-# 角Aのなす角
-anslist.append((getxy_RD(Ax, Ay, Dx, Dy)-getxy_RD(Ax, Ay, Bx, By)) % 360)
- 
-# 角Bのなす角
-anslist.append((getxy_RD(Bx, By, Ax, Ay) - getxy_RD(Bx, By, Cx, Cy)) % 360)
- 
-# 角Cのなす角
-anslist.append((getxy_RD(Cx, Cy, Bx, By)-getxy_RD(Cx, Cy, Dx, Dy)) % 360)
- 
-# 角Dのなす角
-anslist.append((getxy_RD(Dx, Dy, Cx, Cy) - getxy_RD(Dx, Dy, Ax, Ay)) % 360)
- 
-for i in anslist:
-    if i > 180:
-        print("No")
+def main():
+    h, w = i_map()
+    str_list = s_row_list(h)
+    
+    x, y = 0, 0
+    ans_x, ans_y = 0, 0
+    for _ in range(10**6):
+        ans_x, ans_y = x, y
+        move = str_list[x][y]
+        if move == 'U':
+            x -= 1
+        elif move == 'D':
+            x += 1
+        elif move == 'R':
+            y += 1
+        elif move == 'L':
+            y -= 1
+        
+        if x < 0 or x >= h or y < 0 or y >= w:
+            break
+    else:
+        print(-1)
         exit()
  
-print("Yes")
+    print(ans_x+1, ans_y+1)
+ 
+if __name__ == '__main__':
+    main()
