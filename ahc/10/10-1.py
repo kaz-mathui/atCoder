@@ -18,7 +18,6 @@ D = [(0,-1),(-1,0),(0,1),(1,0)]
 group = [[0,1,2,3],[4,5],[6,7]]
 group_index = [0,0,0,0,1,1,2,2]
 
-
 def main():
     def calc_length(sy,sx,sd,is_checked):
         y,x = sy,sx
@@ -53,45 +52,7 @@ def main():
                     elif big[1] < length:
                         big[1] = length
         return big[0]*big[1]
-
-    n = 30
-    t = [list(map(int,input())) for _ in range(n)]
     
-    # ランダムに見つける
-    best = calc_score(t)
-    base_t = [ti[:] for ti in t]
-    T = [ti[:] for ti in t]
-    for _ in range(1000):
-        for y in range(n):
-            for x in range(n):
-                t[y][x] = random.choice(group[group_index[t[y][x]]])
-        score = calc_score(t)
-        if best < score:
-            best = score
-            T = [ti[:] for ti in t]
-
-    t = [ti[:] for ti in T]
-
-    # 近傍で操作して上がるかチェック、上がらなければ戻す
-    for _ in range(1000):
-        by = random.randrange(n)
-        bx = random.randrange(n)
-        for y in range(by-3,by+3):
-            for x in range(bx-3,bx+3):
-                if 0 <= y < n and 0 <= x < n and (y+x)&1:
-                    t[y][x] = next_tile[t[y][x]]
-        score = calc_score(t)
-        if best < score:
-            best = score
-        else:
-            for y in range(by-3,by+3):
-                for x in range(bx-3,bx+3):
-                    if 0 <= y < n and 0 <= x < n and (y+x)&1:
-                        t[y][x] = prev_tile[t[y][x]]
-
-    
-
-
     def dfs(sy,sx,sd,is_used):
         y,x,direction = sy,sx,sd
         stack = [[(y,x,direction,t[y][x])]]
@@ -133,7 +94,6 @@ def main():
                     stack.append(route+[(ny,nx,nd,tnyx)])
         return res
  
- 
     def greedy():
         is_passed = [[[0]*4 for _ in range(n)] for _ in range(n)]
         is_used = [[0]*n for _ in range(n)]
@@ -150,6 +110,40 @@ def main():
                         is_used[y][x] = 1
         return
 
+    n = 30
+    t = [list(map(int,input())) for _ in range(n)]
+    
+    # ランダムに見つける
+    best = calc_score(t)
+    base_t = [ti[:] for ti in t]
+    T = [ti[:] for ti in t]
+    for _ in range(1000):
+        for y in range(n):
+            for x in range(n):
+                t[y][x] = random.choice(group[group_index[t[y][x]]])
+        score = calc_score(t)
+        if best < score:
+            best = score
+            T = [ti[:] for ti in t]
+
+    t = [ti[:] for ti in T]
+
+    # 近傍で操作して上がるかチェック、上がらなければ戻す
+    for _ in range(1000):
+        by = random.randrange(n)
+        bx = random.randrange(n)
+        for y in range(by-3,by+3):
+            for x in range(bx-3,bx+3):
+                if 0 <= y < n and 0 <= x < n and (y+x)&1:
+                    t[y][x] = next_tile[t[y][x]]
+        score = calc_score(t)
+        if best < score:
+            best = score
+        else:
+            for y in range(by-3,by+3):
+                for x in range(bx-3,bx+3):
+                    if 0 <= y < n and 0 <= x < n and (y+x)&1:
+                        t[y][x] = prev_tile[t[y][x]]
     ans = []
     for y in range(n):
         for x in range(n):
