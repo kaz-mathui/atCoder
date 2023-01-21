@@ -110,25 +110,31 @@ def main():
                         is_used[y][x] = 1
         return
 
-    n = 30
+    # ランダムに見つける（最初：山登り的？）
+    # n = 30
+    # t = [list(map(int,input())) for _ in range(n)]
+    # best = calc_score(t)
+    # base_t = [ti[:] for ti in t]
+    # T = [ti[:] for ti in t]
+    # for _ in range(1000):
+    #     for y in range(n):
+    #         for x in range(n):
+    #             t[y][x] = random.choice(group[group_index[t[y][x]]])
+    #     score = calc_score(t)
+    #     if best < score:
+    #         best = score
+    #         T = [ti[:] for ti in t]
+    # t = [ti[:] for ti in T]
+
+    # dfs的に閉路探索
+    n =30
     t = [list(map(int,input())) for _ in range(n)]
-    
-    # ランダムに見つける
+    group_indexes = [[group_index[tyx] for tyx in ty] for ty in t]
     best = calc_score(t)
     base_t = [ti[:] for ti in t]
-    T = [ti[:] for ti in t]
-    for _ in range(1000):
-        for y in range(n):
-            for x in range(n):
-                t[y][x] = random.choice(group[group_index[t[y][x]]])
-        score = calc_score(t)
-        if best < score:
-            best = score
-            T = [ti[:] for ti in t]
+    greedy()
 
-    t = [ti[:] for ti in T]
-
-    # 近傍で操作して上がるかチェック、上がらなければ戻す
+    # 近傍で操作して上がるかチェック、上がらなければ戻す（共通）
     for _ in range(1000):
         by = random.randrange(n)
         bx = random.randrange(n)
@@ -144,6 +150,8 @@ def main():
                 for x in range(bx-3,bx+3):
                     if 0 <= y < n and 0 <= x < n and (y+x)&1:
                         t[y][x] = prev_tile[t[y][x]]
+    
+    # 何回転させるかチェックする機構
     ans = []
     for y in range(n):
         for x in range(n):
