@@ -136,40 +136,44 @@ def main():
                         is_used[y][x] = 1
         return
 
-    # ランダムに見つける（最初：山登り的）
-    n = 30
-    t = [list(map(int,input())) for _ in range(n)]
-    best = calc_score()
-    base_t = [ti[:] for ti in t]
-    T = [ti[:] for ti in t]
-    for _ in range(1000):
-        for y in range(n):
-            for x in range(n):
-                # ランダムにタイルを変更する
-                t[y][x] = random.choice(group[group_index[t[y][x]]])
-        score = calc_score()
-        # 上回ってたらラッキーこっち選択
-        if best < score:
-            best = score
-            T = [ti[:] for ti in t]
-    t = [ti[:] for ti in T]
+    # # ランダムに見つける（最初：山登り的）→19996点
+    # n = 30
+    # t = [list(map(int,input())) for _ in range(n)]
+    # best = calc_score()
+    # base_t = [ti[:] for ti in t]
+    # T = [ti[:] for ti in t]
+    # for _ in range(1000):
+    #     for y in range(n):
+    #         for x in range(n):
+    #             # ランダムにタイルを変更する
+    #             t[y][x] = random.choice(group[group_index[t[y][x]]])
+    #     score = calc_score()
+    #     # 上回ってたらラッキーこっち選択
+    #     if best < score:
+    #         best = score
+    #         T = [ti[:] for ti in t]
+    # t = [ti[:] for ti in T]
 
-    # dfs的に閉路探索
-    n = 30
-    t = [list(map(int,input())) for _ in range(n)]
-    # タイルの種類グループを記録する配列
-    group_indexes = [[group_index[tyx] for tyx in ty] for ty in t]
-    best = calc_score()
-    # 最初のタイルを記録しておく
-    base_t = [ti[:] for ti in t]
-    greedy()
+    # # dfs的に閉路探索　→ 352376　点
+    # n = 30
+    # t = [list(map(int,input())) for _ in range(n)]
+    # # タイルの種類グループを記録する配列
+    # group_indexes = [[group_index[tyx] for tyx in ty] for ty in t]
+    # best = calc_score()
+    # # 最初のタイルを記録しておく
+    # base_t = [ti[:] for ti in t]
+    # greedy()
 
-    # 近傍で操作して上がるかチェック、上がらなければ戻す（共通）
+    
+
+    # 近傍で操作して上がるかチェック、上がらなければ戻す（共通）→10%くらい上がる
     for _ in range(1000):
         by = random.randrange(n)
         bx = random.randrange(n)
         for y in range(by-3,by+3):
             for x in range(bx-3,bx+3):
+                # (y+x)&1 → 奇数ならtrue 偶数ならfalse if 0 = false
+                # 範囲内かつ、x+yが奇数であることを確認している？？
                 if 0 <= y < n and 0 <= x < n and (y+x)&1:
                     t[y][x] = next_tile[t[y][x]]
         score = calc_score()
