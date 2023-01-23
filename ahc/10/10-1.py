@@ -21,11 +21,13 @@ group = [[0,1,2,3],[4,5],[6,7]]
 group_index = [0,0,0,0,1,1,2,2]
 
 def main():
+    # 長さを計算
     def calc_length(sy,sx,sd,is_checked):
         y,x = sy,sx
         direction = sd
         length = 0
         while 1:
+            # 通ったところに印
             is_checked[y][x][direction] = 1
             length += 1
             if direction < 0:
@@ -35,8 +37,10 @@ def main():
             dy,dx = D[direction]
             y += dy
             x += dx
+            # 範囲を越えちゃったら長さ0
             if y < 0 or n <= y or x < 0 or n <= x:
                 return 0
+            # 元の位置に戻ってきたら長さ返して終わり
             if sy == y and sx == x and sd == direction:
                 return length
 
@@ -46,6 +50,7 @@ def main():
         for y in range(n):
             for x in range(n):
                 for direction in range(4):
+                    # if 0 = if false 通ってるなら　continue　つまり別のループのタイミングで計算しているのでここではスキップ
                     if is_checked[y][x][direction]:
                         continue
                     length = calc_length(y,x,direction,is_checked)
@@ -132,20 +137,22 @@ def main():
         return
 
     # ランダムに見つける（最初：山登り的）
-    # n = 30
-    # t = [list(map(int,input())) for _ in range(n)]
-    # best = calc_score()
-    # base_t = [ti[:] for ti in t]
-    # T = [ti[:] for ti in t]
-    # for _ in range(1000):
-    #     for y in range(n):
-    #         for x in range(n):
-    #             t[y][x] = random.choice(group[group_index[t[y][x]]])
-    #     score = calc_score()
-    #     if best < score:
-    #         best = score
-    #         T = [ti[:] for ti in t]
-    # t = [ti[:] for ti in T]
+    n = 30
+    t = [list(map(int,input())) for _ in range(n)]
+    best = calc_score()
+    base_t = [ti[:] for ti in t]
+    T = [ti[:] for ti in t]
+    for _ in range(1000):
+        for y in range(n):
+            for x in range(n):
+                # ランダムにタイルを変更する
+                t[y][x] = random.choice(group[group_index[t[y][x]]])
+        score = calc_score()
+        # 上回ってたらラッキーこっち選択
+        if best < score:
+            best = score
+            T = [ti[:] for ti in t]
+    t = [ti[:] for ti in T]
 
     # dfs的に閉路探索
     n = 30
@@ -153,6 +160,7 @@ def main():
     # タイルの種類グループを記録する配列
     group_indexes = [[group_index[tyx] for tyx in ty] for ty in t]
     best = calc_score()
+    # 最初のタイルを記録しておく
     base_t = [ti[:] for ti in t]
     greedy()
 
