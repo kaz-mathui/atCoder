@@ -1,4 +1,7 @@
+from collections import defaultdict
 import random
+import time
+start = time.time()
 to = [
     [1, 0, -1, -1],
     [3, -1, -1, 0],
@@ -165,7 +168,7 @@ def main():
     # greedy()
 
     # 3つ目　チェックを入れることと回転それぞれを回転させて点数が上がらないか試行錯誤→1774092点
-    # 2→20にすると
+    # 2→20にすると2297016点
     n = 30
     t = [list(map(int,input())) for _ in range(n)]
     group_indexes = [[group_index[tyx] for tyx in ty] for ty in t]
@@ -214,24 +217,47 @@ def main():
     
     # 近傍の調べる範囲
     w = 0
-    # 近傍で操作して上がるかチェック、上がらなければ戻す（共通）→10%くらい上がる
+    # # ※1
+    # # 近傍で操作して上がるかチェック、上がらなければ戻す（共通）→10%くらい上がる
+    # for _ in range(1000):
+    #     by = random.randrange(n)
+    #     bx = random.randrange(n)
+    #     for y in range(by-w,by+w+1):
+    #         for x in range(bx-w,bx+w+1):
+    #             # (y+x)&1 → 奇数ならtrue 偶数ならfalse if 0 = false
+    #             # 範囲内かつ、x+yが奇数であることを確認している？？
+    #             if 0 <= y < n and 0 <= x < n and (y+x)&1:
+    #                 t[y][x] = next_tile[t[y][x]]
+    #     score = calc_score()
+    #     if best < score:
+    #         best = score
+    #     else:
+    #         for y in range(by-w,by+w+1):
+    #             for x in range(bx-w,bx+w+1):
+    #                 if 0 <= y < n and 0 <= x < n and (y+x)&1:
+    #                     t[y][x] = prev_tile[t[y][x]]
+    
+    # ※１をこれにすると2628484に
     for _ in range(1000):
-        by = random.randrange(n)
-        bx = random.randrange(n)
-        for y in range(by-w,by+w+1):
-            for x in range(bx-w,bx+w+1):
-                # (y+x)&1 → 奇数ならtrue 偶数ならfalse if 0 = false
-                # 範囲内かつ、x+yが奇数であることを確認している？？
-                if 0 <= y < n and 0 <= x < n and (y+x)&1:
-                    t[y][x] = next_tile[t[y][x]]
+        if time.time()-start > 1.7:
+            break
+        pre = defaultdict(lambda: None)
+        for _ in range(3):
+            by = random.randrange(n)
+            bx = random.randrange(n)
+            for y in range(by-w,by+w+1):
+                for x in range(bx-w,bx+w+1):
+                    if 0 <= y < n and 0 <= x < n and pre[(y,x)] is None:
+                        pre[(y,x)] = t[y][x]
+                        g = group[group_indexes[y][x]]
+                        while t[y][x] == pre[(y,x)]:
+                            t[y][x] = random.choice(g)
         score = calc_score()
         if best < score:
             best = score
         else:
-            for y in range(by-w,by+w+1):
-                for x in range(bx-w,bx+w+1):
-                    if 0 <= y < n and 0 <= x < n and (y+x)&1:
-                        t[y][x] = prev_tile[t[y][x]]
+            for (y,x),tyx in pre.items():
+                t[y][x] = pre[(y,x)]
     
     # 何回転させるかチェックする
     ans = []
