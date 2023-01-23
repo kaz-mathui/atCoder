@@ -165,17 +165,22 @@ def main():
     # greedy()
 
     # 3つ目　チェックを入れることと回転それぞれを回転させて点数が上がらないか試行錯誤→1774092点
+    # 2→20にすると
     n = 30
     t = [list(map(int,input())) for _ in range(n)]
     group_indexes = [[group_index[tyx] for tyx in ty] for ty in t]
     base_t = [ti[:] for ti in t]
     greedy()
     is_checked = [[[0]*4 for _ in range(n)] for _ in range(n)]
-    for _ in range(2):
+    # 20はキメ
+    for _ in range(20):
         max_ = 0
         argmax = None
         for y in range(n):
             for x in range(n):
+                # どっかから通られてたらスルー
+                if sum(is_checked[y][x]):
+                    continue
                 # タイル種類を取得
                 g = group[group_indexes[y][x]]
                 # 今のタイル種類
@@ -198,6 +203,9 @@ def main():
                             argmax = (y,x,tyx,d)
                 t[y][x] = temp
         # print(argmax)
+        # argmaxに入らない時にエラーになる。のでこれが欲しい
+        if max_ == 0:
+            break
         y,x,tyx,d = argmax
         t[y][x] = tyx
         # 通ったところにチェックをつけることを忘れずに。
@@ -205,13 +213,13 @@ def main():
     best = calc_score()
     
     # 近傍の調べる範囲
-    w = 5
+    w = 0
     # 近傍で操作して上がるかチェック、上がらなければ戻す（共通）→10%くらい上がる
     for _ in range(1000):
         by = random.randrange(n)
         bx = random.randrange(n)
-        for y in range(by-w,by+w):
-            for x in range(bx-w,bx+w):
+        for y in range(by-w,by+w+1):
+            for x in range(bx-w,bx+w+1):
                 # (y+x)&1 → 奇数ならtrue 偶数ならfalse if 0 = false
                 # 範囲内かつ、x+yが奇数であることを確認している？？
                 if 0 <= y < n and 0 <= x < n and (y+x)&1:
@@ -220,8 +228,8 @@ def main():
         if best < score:
             best = score
         else:
-            for y in range(by-w,by+w):
-                for x in range(bx-w,bx+w):
+            for y in range(by-w,by+w+1):
+                for x in range(bx-w,bx+w+1):
                     if 0 <= y < n and 0 <= x < n and (y+x)&1:
                         t[y][x] = prev_tile[t[y][x]]
     
