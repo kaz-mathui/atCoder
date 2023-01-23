@@ -63,6 +63,24 @@ def main():
                         big[1] = length
         return big[0]*big[1]
     
+    def calc_score_():
+        is_checked = [[[0]*4 for _ in range(n)] for _ in range(n)]
+        res = 0
+        big = [0,0]
+        for y in range(n):
+            for x in range(n):
+                for direction in range(4):
+                    if is_checked[y][x][direction]:
+                        continue
+                    length = calc_length(y,x,direction,is_checked)
+                    res += length
+                    if big[0] < length:
+                        big = [length, big[0]]
+                    elif big[1] < length:
+                        big[1] = length
+        res *= big[0]*big[1]
+        return res
+    
     # s：最初のやつ
     def dfs(sy,sx,sd,is_used):
         y,x,direction = sy,sx,sd
@@ -121,7 +139,7 @@ def main():
                 if to[tnyx][nd] >= 0:
                     stack.append(route+[(ny,nx,nd,tnyx)])
         return res
- 
+
     def greedy():
         is_passed = [[[0]*4 for _ in range(n)] for _ in range(n)]
         is_used = [[0]*n for _ in range(n)]
@@ -175,8 +193,7 @@ def main():
     base_t = [ti[:] for ti in t]
     greedy()
     is_checked = [[[0]*4 for _ in range(n)] for _ in range(n)]
-    # 20はキメ
-    for _ in range(20):
+    for _ in range(1000):
         max_ = 0
         argmax = None
         for y in range(n):
@@ -211,53 +228,59 @@ def main():
             break
         y,x,tyx,d = argmax
         t[y][x] = tyx
-        # 通ったところにチェックをつけることを忘れずに。
+        # 通ったところにチェックをつける
         calc_length(y,x,d,is_checked)
     best = calc_score()
     
-    # 近傍の調べる範囲
-    w = 20
-    # # ※1
-    # # 近傍で操作して上がるかチェック、上がらなければ戻す（共通）→10%くらい上がる
-    # for _ in range(1000):
-    #     by = random.randrange(n)
-    #     bx = random.randrange(n)
-    #     for y in range(by-w,by+w+1):
-    #         for x in range(bx-w,bx+w+1):
-    #             # (y+x)&1 → 奇数ならtrue 偶数ならfalse if 0 = false
-    #             # 範囲内かつ、x+yが奇数であることを確認している？？
-    #             if 0 <= y < n and 0 <= x < n and (y+x)&1:
-    #                 t[y][x] = next_tile[t[y][x]]
-    #     score = calc_score()
-    #     if best < score:
-    #         best = score
-    #     else:
-    #         for y in range(by-w,by+w+1):
-    #             for x in range(bx-w,bx+w+1):
-    #                 if 0 <= y < n and 0 <= x < n and (y+x)&1:
-    #                     t[y][x] = prev_tile[t[y][x]]
-    
-    # ※１をこれにすると2628484に
-    for _ in range(1000):
-        if time.time()-start > 1.7:
+    # 近傍の調べる範囲、温度
+    w = 3
+    # ※1
+    # 焼きなまし部分
+    # できた閉路をつなげる、近傍で操作して上がるかチェック、上がらなければ戻す（共通）
+    while True:
+        if time.time()-start > 1.6:
             break
-        pre = defaultdict(lambda: None)
-        for _ in range(3):
-            by = random.randrange(n)
-            bx = random.randrange(n)
-            for y in range(by-w,by+w+1):
-                for x in range(bx-w,bx+w+1):
-                    if 0 <= y < n and 0 <= x < n and pre[(y,x)] is None:
-                        pre[(y,x)] = t[y][x]
-                        g = group[group_indexes[y][x]]
-                        while t[y][x] == pre[(y,x)]:
-                            t[y][x] = random.choice(g)
+        by = random.randrange(n)
+        bx = random.randrange(n)
+        for y in range(by-w,by+w+1):
+            for x in range(bx-w,bx+w+1):
+                # (y+x)&1 → 奇数ならtrue 偶数ならfalse if 0 = false
+                # 範囲内かつ、x+yが奇数であることを確認している？？
+                # if 0 <= y < n and 0 <= x < n and (y+x)&1:
+                if 0 <= y < n and 0 <= x < n:
+                    t[y][x] = next_tile[t[y][x]]
         score = calc_score()
         if best < score:
             best = score
         else:
-            for (y,x),tyx in pre.items():
-                t[y][x] = pre[(y,x)]
+            for y in range(by-w,by+w+1):
+                for x in range(bx-w,bx+w+1):
+                    # if 0 <= y < n and 0 <= x < n and (y+x)&1:
+                    if 0 <= y < n and 0 <= x < n:
+                        t[y][x] = prev_tile[t[y][x]]
+    
+    # # ※１をこれにすると2628484に
+    # # よくわからないから一旦コメントアウト
+    # while True:
+    #     if time.time()-start > 2:
+    #         break
+    #     pre = defaultdict(lambda: None)
+    #     by = random.randrange(n)
+    #     bx = random.randrange(n)
+    #     for y in range(by-w,by+w+1):
+    #         for x in range(bx-w,bx+w+1):
+    #             if 0 <= y < n and 0 <= x < n and pre[(y,x)] is None:
+    #                 pre[(y,x)] = t[y][x]
+    #                 g = group[group_indexes[y][x]]
+    #                 # # while t[y][x] == pre[(y,x)]:
+    #                 # #     t[y][x] = random.choice(g)
+    #                 # t[y][x] = pre[(y,x)]
+    #     score = calc_score()
+    #     if best < score:
+    #         best = score
+    #     else:
+    #         for (y,x),tyx in pre.items():
+    #             t[y][x] = pre[(y,x)]
     
     # 何回転させるかチェックする
     ans = []
